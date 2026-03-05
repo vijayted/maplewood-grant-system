@@ -1,0 +1,164 @@
+<template>
+    <!-- Guest View: Welcome + Login/Register -->
+    <template lwc:if={isGuest}>
+        <div class="landing-wrapper">
+            <div class="landing-container">
+                <!-- Hero Banner -->
+                <div class="hero-banner">
+                    <div class="slds-m-bottom_medium">
+                        <span class="logo-icon-landing">M</span>
+                        <span class="logo-text-landing">APLEWOOD</span>
+                    </div>
+                    <h1 class="slds-text-heading_large slds-m-bottom_medium hero-heading">
+                        Community Development Grant Program
+                    </h1>
+                    <p class="slds-text-body_regular slds-m-bottom_large hero-description">
+                        Supporting local organizations working to strengthen neighborhoods, expand
+                        economic opportunity, and improve quality of life across the county. Eligible
+                        nonprofits and community groups can apply for funding of up to $50,000.
+                    </p>
+                    <div class="slds-grid slds-grid_align-center slds-gutters_small slds-wrap">
+                        <div class="slds-col slds-shrink-none slds-m-bottom_small">
+                            <a href="/grants/login" class="slds-button slds-button_stretch hero-btn hero-btn-login">Log In</a>
+                        </div>
+                        <div class="slds-col slds-shrink-none slds-m-bottom_small">
+                            <a href="/grants/SelfRegister" class="slds-button slds-button_stretch hero-btn hero-btn-register">Register</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Program Highlights -->
+                <div class="slds-grid slds-wrap slds-gutters slds-grid_align-center slds-p-top_large">
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-p-around_small">
+                        <div class="slds-p-around_medium slds-text-align_center highlight-card">
+                            <lightning-icon icon-name="utility:money" size="medium" alternative-text="Funding" class="slds-m-bottom_small highlight-icon"></lightning-icon>
+                            <h3 class="slds-text-heading_small slds-m-bottom_xx-small highlight-heading">Up to $50,000</h3>
+                            <p class="slds-text-body_small highlight-subtext">Per approved project</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-p-around_small">
+                        <div class="slds-p-around_medium slds-text-align_center highlight-card">
+                            <lightning-icon icon-name="utility:groups" size="medium" alternative-text="Organizations" class="slds-m-bottom_small highlight-icon"></lightning-icon>
+                            <h3 class="slds-text-heading_small slds-m-bottom_xx-small highlight-heading">Nonprofits &amp; CBOs</h3>
+                            <p class="slds-text-body_small highlight-subtext">Eligible organization types</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-p-around_small">
+                        <div class="slds-p-around_medium slds-text-align_center highlight-card">
+                            <lightning-icon icon-name="utility:date_input" size="medium" alternative-text="Timeline" class="slds-m-bottom_small highlight-icon"></lightning-icon>
+                            <h3 class="slds-text-heading_small slds-m-bottom_xx-small highlight-heading">24 Months Max</h3>
+                            <p class="slds-text-body_small highlight-subtext">Project duration</p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-p-around_small">
+                        <div class="slds-p-around_medium slds-text-align_center highlight-card">
+                            <lightning-icon icon-name="utility:people" size="medium" alternative-text="Impact" class="slds-m-bottom_small highlight-icon"></lightning-icon>
+                            <h3 class="slds-text-heading_small slds-m-bottom_xx-small highlight-heading">50+ Beneficiaries</h3>
+                            <p class="slds-text-body_small highlight-subtext">Minimum community impact</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Authenticated View: Dashboard / Form / Detail -->
+    <template lwc:if={isLoggedIn}>
+        <div class="user-bar">
+            <span class="welcome-text">Welcome to the Maplewood Grant Portal</span>
+            <lightning-button
+                label="Log Out"
+                variant="destructive-text"
+                icon-name="utility:logout"
+                onclick={handleLogout}>
+            </lightning-button>
+        </div>
+
+        <!-- Dashboard View -->
+        <template lwc:if={showDashboard}>
+            <lightning-card title="My Grant Applications" icon-name="standard:opportunity">
+                <div slot="actions">
+                    <lightning-button
+                        label="New Application"
+                        variant="brand"
+                        icon-name="utility:add"
+                        onclick={handleNewApplication}>
+                    </lightning-button>
+                </div>
+
+                <div class="slds-p-around_medium">
+                    <template lwc:if={isLoading}>
+                        <div class="slds-align_absolute-center slds-p-vertical_large">
+                            <lightning-spinner alternative-text="Loading applications" size="medium"></lightning-spinner>
+                        </div>
+                    </template>
+
+                    <template lwc:if={error}>
+                        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                            <span class="slds-assistive-text">error</span>
+                            <h2>{error}</h2>
+                        </div>
+                    </template>
+
+                    <template lwc:if={hasApplications}>
+                        <lightning-datatable
+                            key-field="Id"
+                            data={applications}
+                            columns={columns}
+                            hide-checkbox-column
+                            onrowaction={handleRowAction}
+                            show-row-number-column>
+                        </lightning-datatable>
+                    </template>
+
+                    <template lwc:if={showEmptyState}>
+                        <div class="slds-illustration slds-illustration_large slds-p-vertical_large slds-text-align_center">
+                            <lightning-icon
+                                icon-name="utility:description"
+                                size="large"
+                                alternative-text="No applications"
+                                class="slds-m-bottom_medium">
+                            </lightning-icon>
+                            <h3 class="slds-text-heading_medium slds-m-top_medium">No Applications Yet</h3>
+                            <p class="slds-text-body_regular slds-m-top_small slds-m-bottom_medium">
+                                You haven't submitted any applications yet. Start your first grant application!
+                            </p>
+                            <lightning-button
+                                label="Start New Application"
+                                variant="brand"
+                                icon-name="utility:add"
+                                onclick={handleNewApplication}>
+                            </lightning-button>
+                        </div>
+                    </template>
+                </div>
+            </lightning-card>
+        </template>
+
+        <!-- Application Form View -->
+        <template lwc:if={showForm}>
+            <nav class="slds-m-bottom_small slds-p-horizontal_medium" aria-label="Breadcrumb">
+                <ol class="slds-breadcrumb slds-list_horizontal">
+                    <li class="slds-breadcrumb__item">
+                        <a href="javascript:void(0);" onclick={handleBackToDashboard}>My Applications</a>
+                    </li>
+                    <li class="slds-breadcrumb__item">New Application</li>
+                </ol>
+            </nav>
+            <c-grant-application-form oncomplete={handleFormComplete} onback={handleBackToDashboard}></c-grant-application-form>
+        </template>
+
+        <!-- Application Detail View -->
+        <template lwc:if={showDetail}>
+            <nav class="slds-m-bottom_small slds-p-horizontal_medium" aria-label="Breadcrumb">
+                <ol class="slds-breadcrumb slds-list_horizontal">
+                    <li class="slds-breadcrumb__item">
+                        <a href="javascript:void(0);" onclick={handleBackToDashboard}>My Applications</a>
+                    </li>
+                    <li class="slds-breadcrumb__item">Application Detail</li>
+                </ol>
+            </nav>
+            <c-application-detail record-id={selectedRecordId} onback={handleBackToDashboard}></c-application-detail>
+        </template>
+    </template>
+</template>

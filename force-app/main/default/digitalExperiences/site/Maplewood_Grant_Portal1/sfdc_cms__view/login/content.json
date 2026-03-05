@@ -1,0 +1,81 @@
+{
+  "type" : "sfdc_cms__view",
+  "title" : "Login",
+  "contentBody" : {
+    "component" : {
+      "children" : [ {
+        "children" : [ {
+          "attributes" : {
+            "backgroundImageConfig" : "",
+            "backgroundImageOverlay" : "rgba(0,0,0,0)",
+            "componentSpacerSize" : "",
+            "layoutDirectionDesktop" : "row",
+            "layoutDirectionMobile" : "column",
+            "layoutDirectionTablet" : "column",
+            "maxContentWidth" : "",
+            "sectionColumnGutterWidth" : "",
+            "sectionConfig" : "{\"UUID\":\"5d43ae47-5426-4d31-a6da-1a2ed924f774\",\"columns\":[{\"UUID\":\"4e61a6cf-f8ef-405a-abc3-d94fb2e8599a\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
+            "sectionMinHeight" : "",
+            "sectionVerticalAlign" : "flex-start"
+          },
+          "children" : [ {
+            "children" : [ {
+              "attributes" : {},
+              "definition" : "c:loginBranding",
+              "id" : "35f82b9e-31ed-4ee7-91d7-c1d7638b7fbd",
+              "type" : "component"
+            }, {
+              "attributes" : {
+                "forgotPasswordLabel" : "Forgot your password?",
+                "forgotPasswordUrl" : "/ForgotPassword",
+                "loginButtonLabel" : "Log In",
+                "passwordLabel" : "Password",
+                "selfRegisterLabel" : "Don't have an account? Register",
+                "selfRegisterUrl" : "/SelfRegister",
+                "startUrl" : "",
+                "usernameLabel" : "Email"
+              },
+              "definition" : "community_login:loginForm",
+              "id" : "a7b779ff-52e9-4bef-86ef-b06e366f9d5d",
+              "type" : "component"
+            } ],
+            "id" : "4e61a6cf-f8ef-405a-abc3-d94fb2e8599a",
+            "name" : "col1",
+            "title" : "Column 1",
+            "type" : "region"
+          } ],
+          "definition" : "community_layout:section",
+          "id" : "5d43ae47-5426-4d31-a6da-1a2ed924f774",
+          "type" : "component"
+        } ],
+        "id" : "c1487c4c-eb01-494e-8ece-0d6b3484c56d",
+        "name" : "content",
+        "title" : "Content",
+        "type" : "region"
+      }, {
+        "children" : [ {
+          "attributes" : {
+            "customHeadTags" : "",
+            "description" : "",
+            "pageTitle" : "Login - Maplewood Grant Portal",
+            "recordId" : "{!recordId}"
+          },
+          "definition" : "community_builder:seoAssistant",
+          "id" : "076e88af-41ad-442a-8e75-8f7ad9c931b9",
+          "type" : "component"
+        } ],
+        "id" : "e228f44f-7d36-4c96-82f2-5ea10c251ad1",
+        "name" : "sfdcHiddenRegion",
+        "title" : "sfdcHiddenRegion",
+        "type" : "region"
+      } ],
+      "definition" : "community_layout:sldsFlexibleLayout",
+      "id" : "6d191228-a3b3-476b-967f-e9a29fc7079d",
+      "type" : "component"
+    },
+    "dataProviders" : [ ],
+    "themeLayoutType" : "Inner",
+    "viewType" : "login-main"
+  },
+  "urlName" : "login"
+}

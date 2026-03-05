@@ -1,0 +1,131 @@
+/* Status Badges */
+.badge-submitted {
+    background-color: #0070d2;
+    color: #ffffff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+}
+
+.badge-underreview {
+    background-color: #ff9a3c;
+    color: #ffffff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+}
+
+.badge-approved {
+    background-color: #1a652a;
+    color: #ffffff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+}
+
+.badge-rejected {
+    background-color: #993333;
+    color: #ffffff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+}
+
+/* Eligibility Panel */
+.eligibility-panel {
+    border-left: 4px solid #0070d2;
+    background-color: #f7f9fb;
+}
+
+.rule-pass {
+    background-color: #f0faf0;
+}
+
+.rule-fail {
+    background-color: #fef0ef;
+}
+
+.rule-name {
+    font-weight: 600;
+}
+
+/* Rejection Panel */
+.rejection-panel {
+    border-left: 4px solid #993333;
+    background-color: #fef5f5;
+}
+
+.rejection-comments {
+    white-space: pre-wrap;
+    line-height: 1.5;
+    color: #16325c;
+}
+
+/* Award Panel */
+.award-panel {
+    border-left: 4px solid #1a652a;
+    background-color: #f0faf0;
+}
+
+.award-amount-header {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a652a;
+}
+
+/* Field Display */
+.field-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #706e6b;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    margin-bottom: 0.125rem;
+}
+
+.field-value {
+    font-size: 0.9375rem;
+    color: #16325c;
+    line-height: 1.4;
+}
+
+.amount-requested {
+    font-weight: 700;
+    color: #0070d2;
+    font-size: 1.0625rem;
+}
+
+.mission-text,
+.description-text {
+    white-space: pre-wrap;
+    line-height: 1.5;
+}
+
+/* Section Headers */
+.slds-section__title {
+    border-radius: 0.25rem;
+}
+
+/* Files */
+.file-link {
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.file-link:hover {
+    text-decoration: underline;
+}
+
+/* Modal */
+.slds-modal__content {
+    overflow: visible;
+}
+
+/* Header */
+.header-container {
+    width: 100%;
+}

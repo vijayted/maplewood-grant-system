@@ -1,0 +1,153 @@
+<template>
+    <!-- Fund Overview Panel -->
+    <div class="fund-overview slds-m-bottom_medium">
+        <div class="fund-header">
+            <lightning-icon icon-name="standard:currency" size="small" alternative-text="Fund" class="slds-m-right_x-small"></lightning-icon>
+            <h2 class="fund-title">Fund Overview</h2>
+            <span class="fund-year">FY 2026</span>
+        </div>
+        <div class="slds-grid slds-gutters slds-wrap fund-body">
+            <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-5">
+                <div class="fund-metric">
+                    <span class="fund-label">Total Fund Budget</span>
+                    <span class="fund-value fund-value-budget">{totalBudget}</span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-5">
+                <div class="fund-metric">
+                    <span class="fund-label">Funds Awarded</span>
+                    <span class="fund-value fund-value-awarded">{totalAwarded}</span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-5">
+                <div class="fund-metric">
+                    <span class="fund-label">Funds Remaining</span>
+                    <span class="fund-value fund-value-remaining">{fundsRemaining}</span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-5">
+                <div class="fund-metric">
+                    <span class="fund-label">Pending Requests</span>
+                    <span class="fund-value fund-value-pending">{pendingRequested}</span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-5">
+                <div class="fund-metric">
+                    <span class="fund-label">Utilization</span>
+                    <span class="fund-value fund-value-util">{utilizationPct}%</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style={progressBarStyle}></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <lightning-card title="Grant Applications" icon-name="standard:work_order">
+
+        <!-- Summary Cards -->
+        <div class="slds-p-horizontal_medium slds-p-top_medium">
+            <div class="slds-grid slds-gutters slds-wrap" role="group" aria-label="Application status summary">
+
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-p-bottom_small">
+                    <div class="summary-card card-submitted">
+                        <div class="card-label">Submitted</div>
+                        <div class="card-count">{submittedCount}</div>
+                    </div>
+                </div>
+
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-p-bottom_small">
+                    <div class="summary-card card-underreview">
+                        <div class="card-label">Under Review</div>
+                        <div class="card-count">{underReviewCount}</div>
+                    </div>
+                </div>
+
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-p-bottom_small">
+                    <div class="summary-card card-approved">
+                        <div class="card-label">Approved</div>
+                        <div class="card-count">{approvedCount}</div>
+                        <div class="card-detail">{totalAwarded} awarded</div>
+                    </div>
+                </div>
+
+                <div class="slds-col slds-size_1-of-2 slds-large-size_1-of-4 slds-p-bottom_small">
+                    <div class="summary-card card-rejected">
+                        <div class="card-label">Rejected</div>
+                        <div class="card-count">{rejectedCount}</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="slds-p-horizontal_medium slds-p-vertical_small filter-bar">
+            <div class="slds-grid slds-gutters slds-grid_vertical-align-end">
+                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                    <lightning-combobox
+                        name="statusFilter"
+                        label="Filter by Status"
+                        value={statusFilter}
+                        options={statusOptions}
+                        onchange={handleStatusChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                    <lightning-combobox
+                        name="eligibilityFilter"
+                        label="Filter by Eligibility"
+                        value={eligibilityFilter}
+                        options={eligibilityOptions}
+                        onchange={handleEligibilityChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-grow slds-text-align_right slds-p-top_medium">
+                    <span class="slds-text-body_small slds-text-color_weak">
+                        Showing {filteredCount} application(s)
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="slds-p-around_medium">
+            <template lwc:if={isLoading}>
+                <div class="slds-align_absolute-center slds-p-vertical_large">
+                    <lightning-spinner alternative-text="Loading applications" size="medium"></lightning-spinner>
+                </div>
+            </template>
+
+            <template lwc:if={error}>
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">error</span>
+                    <h2>{error}</h2>
+                </div>
+            </template>
+
+            <template lwc:if={hasApplications}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={filteredApplications}
+                    columns={columns}
+                    hide-checkbox-column
+                    onrowaction={handleRowAction}
+                    show-row-number-column>
+                </lightning-datatable>
+            </template>
+
+            <template lwc:if={showEmptyState}>
+                <div class="slds-illustration slds-illustration_small slds-p-vertical_large slds-text-align_center">
+                    <lightning-icon
+                        icon-name="utility:filterList"
+                        size="large"
+                        alternative-text="No results"
+                        class="slds-m-bottom_medium">
+                    </lightning-icon>
+                    <h3 class="slds-text-heading_medium slds-m-top_medium">{emptyMessage}</h3>
+                </div>
+            </template>
+        </div>
+
+    </lightning-card>
+</template>

@@ -1,0 +1,39 @@
+<template>
+    <template lwc:if={hasResults}>
+        <div class="eligibility-container">
+            <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small">
+                <h3 class="slds-text-heading_small">Eligibility Results</h3>
+                <span class="slds-m-left_small">
+                    <span class={overallBadgeClass}>{overallLabel}</span>
+                </span>
+            </div>
+
+            <template for:each={results} for:item="rule">
+                <div key={rule.ruleId} class={rule.cssClass}>
+                    <div class="slds-grid slds-grid_vertical-align-center slds-p-vertical_xx-small">
+                        <lightning-icon
+                            icon-name={rule.iconName}
+                            variant={rule.iconVariant}
+                            size="x-small"
+                            alternative-text={rule.ruleName}>
+                        </lightning-icon>
+                        <span class="slds-m-left_x-small rule-name">{rule.ruleName}</span>
+                    </div>
+                    <template lwc:if={rule.message}>
+                        <p class="slds-text-body_small slds-m-left_large rule-message">{rule.message}</p>
+                    </template>
+                </div>
+            </template>
+
+            <div class="slds-m-top_small slds-border_top slds-p-top_small summary-row">
+                <strong>{summaryText}</strong>
+            </div>
+        </div>
+    </template>
+
+    <template lwc:else>
+        <div class="slds-text-color_weak slds-p-around_small">
+            No eligibility data available.
+        </div>
+    </template>
+</template>

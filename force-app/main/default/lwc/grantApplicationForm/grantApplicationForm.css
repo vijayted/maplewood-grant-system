@@ -1,0 +1,113 @@
+/* Error/Success banners */
+.error-banner {
+    background-color: #c23934;
+    color: #ffffff;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+}
+
+.success-banner {
+    background-color: #1a652a;
+    color: #ffffff;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Eligibility status colors */
+.eligibility-pass {
+    --sds-c-icon-color-foreground-default: #1A652A;
+    color: #1A652A;
+}
+
+.eligibility-fail {
+    --sds-c-icon-color-foreground-default: #993333;
+    color: #993333;
+}
+
+.eligibility-neutral {
+    --sds-c-icon-color-foreground-default: #6B7280;
+    color: #6B7280;
+}
+
+/* Eligibility panel */
+.eligibility-panel {
+    position: sticky;
+    top: 1rem;
+}
+
+.eligibility-rule {
+    padding: 0.25rem 0;
+}
+
+/* Eligibility badges */
+.eligibility-badge-pass {
+    background-color: #1A652A;
+    color: #FFFFFF;
+    padding: 0.25rem 0.75rem;
+}
+
+.eligibility-badge-warn {
+    background-color: #FBAD18;
+    color: #060808;
+    padding: 0.25rem 0.75rem;
+}
+
+/* Review step */
+.review-section {
+    margin-bottom: 1rem;
+}
+
+.review-field {
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0;
+}
+
+.review-label {
+    font-weight: 700;
+    color: #444444;
+}
+
+/* Warning banner on review */
+.warning-banner {
+    background-color: #FFFBEA;
+    border: 1px solid #FBAD18;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* File input */
+.file-input {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px dashed #D8DDE6;
+    border-radius: 4px;
+    cursor: pointer;
+    min-height: 44px;
+}
+
+.file-input:focus-visible {
+    outline: 2px solid #003068;
+    outline-offset: 2px;
+}
+
+/* Spinner overlay */
+.spinner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9000;
+}

@@ -1,0 +1,155 @@
+/* Status Badges */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.875rem;
+    display: inline-block;
+    line-height: 1.4;
+}
+
+.status-submitted {
+    background-color: #EAF3FF;
+    color: #0070D2;
+}
+
+.status-underreview {
+    background-color: #FFF3E0;
+    color: #FF9A3C;
+}
+
+.status-approved {
+    background-color: #E8F5E9;
+    color: #1A652A;
+}
+
+.status-rejected {
+    background-color: #FFEBEE;
+    color: #993333;
+}
+
+/* Section Headers */
+.section-header {
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-bottom: 2px solid #003068;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.section-header-rejected {
+    border-bottom-color: #993333;
+}
+
+/* Field Display */
+.field-label {
+    font-weight: 600;
+    color: #444;
+    font-size: 0.8125rem;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.mission-text {
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+/* Eligibility Section */
+.eligibility-summary {
+    padding: 0.75rem 1rem;
+    background-color: #F7F9FB;
+    border-radius: 6px;
+}
+
+.eligibility-pass {
+    color: #1A652A;
+}
+
+.eligibility-fail {
+    color: #993333;
+}
+
+.eligibility-neutral {
+    color: #6B7280;
+}
+
+.eligibility-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.eligibility-item {
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.eligibility-item:last-child {
+    border-bottom: none;
+}
+
+.rule-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.rule-message {
+    font-size: 0.8125rem;
+    margin-top: 2px;
+}
+
+/* Award Section */
+.award-highlight {
+    background: linear-gradient(135deg, #E8F5E9 0%, #F1F8F2 100%);
+    border-radius: 8px;
+    border-left: 4px solid #1A652A;
+    text-align: center;
+}
+
+.award-amount {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1A652A;
+}
+
+.award-section table {
+    margin-top: 0.5rem;
+}
+
+/* Rejection Section */
+.rejection-section {
+    background-color: #FFF8F8;
+    border-radius: 8px;
+    border-left: 4px solid #993333;
+}
+
+.reviewer-comments {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+/* Documents Section */
+.file-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.file-item {
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+}

@@ -1,0 +1,396 @@
+<template>
+    <!-- Loading Spinner -->
+    <template lwc:if={isLoading}>
+        <div class="slds-align_absolute-center slds-p-vertical_xx-large">
+            <lightning-spinner alternative-text="Loading application details" size="large"></lightning-spinner>
+        </div>
+    </template>
+
+    <!-- Error State -->
+    <template lwc:if={error}>
+        <div class="slds-notify slds-notify_alert slds-alert_error slds-m-around_medium" role="alert">
+            <span class="slds-assistive-text">error</span>
+            <h2>{error}</h2>
+        </div>
+    </template>
+
+    <!-- Application Detail -->
+    <template lwc:if={hasApplication}>
+        <nav class="slds-m-bottom_small slds-m-horizontal_medium" aria-label="Breadcrumb">
+            <ol class="slds-breadcrumb slds-list_horizontal">
+                <li class="slds-breadcrumb__item">
+                    <a href="javascript:void(0);" onclick={handleBack}>Review Dashboard</a>
+                </li>
+                <li class="slds-breadcrumb__item">{appName}</li>
+            </ol>
+        </nav>
+        <lightning-card>
+
+            <!-- Header -->
+            <div slot="title" class="header-container">
+                <div class="slds-grid slds-grid_vertical-align-center slds-wrap">
+                    <div class="slds-col">
+                        <h1 class="slds-text-heading_medium">{appName}</h1>
+                        <p class="slds-text-body_regular slds-text-color_weak slds-m-top_xx-small">
+                            {application.Organization_Name__c}
+                        </p>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                            Submitted {submittedDateFormatted} by {submittedByName}
+                        </p>
+                    </div>
+                    <div class="slds-col slds-no-flex slds-m-left_medium">
+                        <span class={statusBadgeClass}>{application.Status__c}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div slot="actions">
+                <template lwc:if={showActionButtons}>
+                    <div class="slds-button-group" role="group">
+                        <template lwc:if={canMarkUnderReview}>
+                            <lightning-button
+                                label="Mark Under Review"
+                                variant="neutral"
+                                icon-name="utility:preview"
+                                onclick={handleMarkUnderReview}
+                                disabled={isProcessing}>
+                            </lightning-button>
+                        </template>
+                        <template lwc:if={canApprove}>
+                            <lightning-button
+                                label="Approve"
+                                variant="success"
+                                icon-name="utility:check"
+                                onclick={handleApproveClick}
+                                disabled={isProcessing}>
+                            </lightning-button>
+                        </template>
+                        <template lwc:if={canReject}>
+                            <lightning-button
+                                label="Reject"
+                                variant="destructive"
+                                icon-name="utility:close"
+                                onclick={handleRejectClick}
+                                disabled={isProcessing}>
+                            </lightning-button>
+                        </template>
+                    </div>
+                </template>
+            </div>
+
+            <div class="slds-p-around_medium">
+
+                <!-- Eligibility Panel -->
+                <div class="slds-box slds-m-bottom_medium eligibility-panel">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small">
+                        <lightning-icon
+                            icon-name={eligibilityIconName}
+                            variant={eligibilityIconVariant}
+                            size="small"
+                            alternative-text={eligibilityLabel}
+                            class="slds-m-right_small">
+                        </lightning-icon>
+                        <h2 class="slds-text-heading_small">
+                            Eligibility: {eligibilityLabel}
+                        </h2>
+                        <span class="slds-m-left_medium slds-text-body_small slds-text-color_weak">
+                            ({eligibilityScoreLabel})
+                        </span>
+                    </div>
+
+                    <template lwc:if={hasEligibilityRules}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered" role="grid" aria-label="Eligibility rule results">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col" style="width: 3rem;"><div class="slds-truncate" title="Status">Status</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Rule">Rule</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Result">Result</div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={eligibilityRules} for:item="rule">
+                                    <tr key={rule.key} class={rule.rowClass}>
+                                        <td>
+                                            <lightning-icon
+                                                icon-name={rule.iconName}
+                                                variant={rule.iconVariant}
+                                                size="x-small"
+                                                alternative-text={rule.passed}>
+                                            </lightning-icon>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate rule-name">{rule.ruleName}</div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate">{rule.message}</div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                </div>
+
+                <!-- Reviewer Comments (Rejected) -->
+                <template lwc:if={showReviewerComments}>
+                    <div class="slds-box slds-m-bottom_medium rejection-panel">
+                        <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small">
+                            <lightning-icon icon-name="utility:close" variant="error" size="small" alternative-text="Rejected" class="slds-m-right_small"></lightning-icon>
+                            <h2 class="slds-text-heading_small">Rejection Details</h2>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-m-top_small">
+                            <div class="slds-col slds-size_1-of-1">
+                                <p class="slds-text-body_regular rejection-comments">{application.Reviewer_Comments__c}</p>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-m-top_small">
+                                <span class="slds-text-body_small slds-text-color_weak">
+                                    Reviewed by {reviewerName} on {reviewedDateFormatted}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Award Section (Approved) -->
+                <template lwc:if={showAwardSection}>
+                    <div class="slds-box slds-m-bottom_medium award-panel">
+                        <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small">
+                            <lightning-icon icon-name="utility:moneybag" variant="success" size="small" alternative-text="Award" class="slds-m-right_small"></lightning-icon>
+                            <h2 class="slds-text-heading_small">Award Information</h2>
+                            <span class="slds-m-left_medium award-amount-header">{formattedAwardAmount}</span>
+                        </div>
+                        <div class="slds-m-top_small">
+                            <span class="slds-text-body_small slds-text-color_weak">
+                                Approved by {reviewerName} on {reviewedDateFormatted}
+                            </span>
+                        </div>
+                        <div class="slds-m-top_medium">
+                            <c-award-breakdown breakdown-data={application.Award_Breakdown__c}></c-award-breakdown>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Organization Information -->
+                <div class="slds-section slds-is-open slds-m-bottom_medium">
+                    <h2 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small" title="Organization Information">
+                            Organization Information
+                        </span>
+                    </h2>
+                    <div class="slds-section__content">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Organization Name</div>
+                                <div class="field-value">{application.Organization_Name__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">EIN (Tax ID)</div>
+                                <div class="field-value">{application.EIN__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Organization Type</div>
+                                <div class="field-value">{application.Organization_Type__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Year Founded</div>
+                                <div class="field-value">{application.Year_Founded__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Annual Operating Budget</div>
+                                <div class="field-value">{formattedAnnualBudget}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Full-Time Employees</div>
+                                <div class="field-value">{application.Num_Employees__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Primary Contact</div>
+                                <div class="field-value">{application.Contact_Name__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Contact Email</div>
+                                <div class="field-value">{application.Contact_Email__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Contact Phone</div>
+                                <div class="field-value">{application.Contact_Phone__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-p-vertical_x-small">
+                                <div class="field-label">Address</div>
+                                <div class="field-value">{application.Organization_Address__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-p-vertical_x-small">
+                                <div class="field-label">Mission Statement</div>
+                                <div class="field-value mission-text">{application.Mission_Statement__c}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Details -->
+                <div class="slds-section slds-is-open slds-m-bottom_medium">
+                    <h2 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small" title="Project Details">
+                            Project Details
+                        </span>
+                    </h2>
+                    <div class="slds-section__content">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Project Title</div>
+                                <div class="field-value">{application.Project_Title__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Project Category</div>
+                                <div class="field-value">{application.Project_Category__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-p-vertical_x-small">
+                                <div class="field-label">Project Description</div>
+                                <div class="field-value description-text">{application.Project_Description__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Target Population</div>
+                                <div class="field-value">{application.Target_Population__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Estimated Beneficiaries</div>
+                                <div class="field-value">{application.Num_Beneficiaries__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Total Project Cost</div>
+                                <div class="field-value">{formattedTotalProjectCost}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Amount Requested</div>
+                                <div class="field-value amount-requested">{formattedAmountRequested}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Project Start Date</div>
+                                <div class="field-value">{application.Project_Start_Date__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Project End Date</div>
+                                <div class="field-value">{application.Project_End_Date__c}</div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-p-vertical_x-small">
+                                <div class="field-label">Previously Funded by Maplewood</div>
+                                <div class="field-value">{previouslyFundedLabel}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attached Documents -->
+                <div class="slds-section slds-is-open slds-m-bottom_medium">
+                    <h2 class="slds-section__title slds-theme_shade">
+                        <span class="slds-truncate slds-p-horizontal_small" title="Attached Documents">
+                            Attached Documents
+                        </span>
+                    </h2>
+                    <div class="slds-section__content">
+                        <template lwc:if={hasFiles}>
+                            <ul class="slds-list_dotted">
+                                <template for:each={files} for:item="file">
+                                    <li key={file.id} class="slds-p-vertical_xx-small slds-grid slds-grid_vertical-align-center">
+                                        <a href="javascript:void(0);"
+                                           data-versionid={file.versionId}
+                                           onclick={handleFilePreview}
+                                           class="file-link">
+                                            <lightning-icon icon-name="doctype:attachment" size="x-small" alternative-text="File" class="slds-m-right_xx-small"></lightning-icon>
+                                            {file.title}
+                                        </a>
+                                        <span class="slds-text-body_small slds-text-color_weak slds-m-left_small">
+                                            ({file.fileType} &bull; {file.size})
+                                        </span>
+                                        <lightning-button-icon
+                                            icon-name="utility:preview"
+                                            alternative-text="Preview file"
+                                            title="Preview"
+                                            data-versionid={file.versionId}
+                                            onclick={handleFilePreview}
+                                            class="slds-m-left_small">
+                                        </lightning-button-icon>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+                        <template lwc:else>
+                            <p class="slds-text-color_weak">No documents attached.</p>
+                        </template>
+                    </div>
+                </div>
+
+            </div>
+        </lightning-card>
+
+        <!-- Approve Confirmation Modal -->
+        <template lwc:if={showApproveModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="approve-modal-heading" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCancelModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="Close" size="small" variant="inverse"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="approve-modal-heading" class="slds-modal__title slds-hyphenate">
+                            <lightning-icon icon-name="utility:check" variant="success" size="small" class="slds-m-right_small" alternative-text="Approve"></lightning-icon>
+                            Confirm Approval
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p class="slds-m-bottom_medium">
+                            You are about to approve <strong>{appName}</strong> from <strong>{application.Organization_Name__c}</strong>.
+                            The following award breakdown has been calculated:
+                        </p>
+                        <c-award-breakdown breakdown-data={awardBreakdownData}></c-award-breakdown>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" variant="neutral" onclick={handleCancelModal} disabled={isProcessing}></lightning-button>
+                        <lightning-button label="Confirm Approval" variant="success" onclick={handleConfirmApprove} disabled={isProcessing} class="slds-m-left_x-small"></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- Reject Modal -->
+        <template lwc:if={showRejectModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="reject-modal-heading" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-theme_error slds-theme_alert-texture">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCancelModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="Close" size="small" variant="inverse"></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="reject-modal-heading" class="slds-modal__title slds-hyphenate">
+                            <lightning-icon icon-name="utility:close" size="small" class="slds-m-right_small" alternative-text="Reject" variant="inverse"></lightning-icon>
+                            Reject Application
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p class="slds-m-bottom_medium">
+                            You are about to reject <strong>{appName}</strong> from <strong>{application.Organization_Name__c}</strong>.
+                            Please provide a reason for rejection. This will be visible to the applicant.
+                        </p>
+                        <lightning-textarea
+                            label="Rejection Comments"
+                            value={rejectComments}
+                            onchange={handleRejectCommentsChange}
+                            required
+                            max-length="5000"
+                            placeholder="Explain the reason for rejection..."
+                            message-when-value-missing="Rejection comments are required.">
+                        </lightning-textarea>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" variant="neutral" onclick={handleCancelModal} disabled={isProcessing}></lightning-button>
+                        <lightning-button label="Confirm Rejection" variant="destructive" onclick={handleConfirmReject} disabled={isProcessing} class="slds-m-left_x-small"></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+    </template>
+</template>

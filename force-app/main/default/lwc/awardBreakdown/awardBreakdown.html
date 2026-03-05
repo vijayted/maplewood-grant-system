@@ -1,0 +1,73 @@
+<template>
+    <template lwc:if={hasData}>
+        <div class="slds-card slds-p-around_medium breakdown-container">
+            <h3 class="slds-text-heading_small slds-m-bottom_medium">
+                <lightning-icon icon-name="utility:chart" size="small" alternative-text="Award breakdown" class="slds-m-right_x-small"></lightning-icon>
+                Award Scoring Breakdown
+            </h3>
+
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped" role="grid" aria-label="Award scoring breakdown">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Factor">Factor</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Score">Score</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Reasoning">Reasoning</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={factors} for:item="factor">
+                        <tr key={factor.factorName} class="slds-hint-parent">
+                            <td data-label="Factor">
+                                <div class="slds-truncate factor-name">{factor.factorName}</div>
+                            </td>
+                            <td data-label="Score">
+                                <span class="score-badge">{factor.score} / 3</span>
+                            </td>
+                            <td data-label="Reasoning">
+                                <div class="slds-truncate">{factor.reasoning}</div>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td>
+                            <div class="slds-text-title_bold">Total Score</div>
+                        </td>
+                        <td>
+                            <span class="total-score-badge">{totalScore} / {maxScore}</span>
+                        </td>
+                        <td>
+                            <div class="score-bar-container">
+                                <div class="score-bar" style={scoreBarWidth}></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="slds-grid slds-gutters slds-m-top_medium award-summary">
+                <div class="slds-col slds-size_1-of-2 slds-text-align_center percentage-box">
+                    <div class="slds-text-title_caps slds-m-bottom_xx-small">Award Percentage</div>
+                    <div class="percentage-value">{awardPercentage}%</div>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-text-align_center award-box">
+                    <div class="slds-text-title_caps slds-m-bottom_xx-small">Final Award Amount</div>
+                    <div class="award-value">{formattedFinalAward}</div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template lwc:else>
+        <div class="slds-text-align_center slds-p-around_medium slds-text-color_weak">
+            No award breakdown data available.
+        </div>
+    </template>
+</template>

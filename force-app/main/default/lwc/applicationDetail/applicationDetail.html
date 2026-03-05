@@ -1,0 +1,294 @@
+<template>
+    <!-- Loading Spinner -->
+    <template lwc:if={isLoading}>
+        <div class="slds-align_absolute-center slds-p-vertical_xx-large">
+            <lightning-spinner alternative-text="Loading application details" size="large"></lightning-spinner>
+        </div>
+    </template>
+
+    <!-- Error State -->
+    <template lwc:if={error}>
+        <lightning-card title="Error">
+            <div class="slds-p-around_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">error</span>
+                    <h2>{error}</h2>
+                </div>
+                <div class="slds-m-top_medium slds-text-align_center">
+                    <lightning-button label="Back to Dashboard" variant="neutral" onclick={handleBack}></lightning-button>
+                </div>
+            </div>
+        </lightning-card>
+    </template>
+
+    <!-- Application Detail -->
+    <template lwc:if={application.Id}>
+        <lightning-card>
+            <!-- Header -->
+            <div slot="title">
+                <div class="slds-grid slds-grid_vertical-align-center slds-wrap">
+                    <div class="slds-col slds-grow">
+                        <div class="slds-grid slds-grid_vertical-align-center slds-gutters_x-small">
+                            <div class="slds-col">
+                                <h1 class="slds-text-heading_medium">{pageTitle}</h1>
+                            </div>
+                            <div class="slds-col slds-no-flex">
+                                <span class={statusBadgeClass}>{statusLabel}</span>
+                            </div>
+                        </div>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                            Submitted on {formattedCreatedDate}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div slot="actions">
+                <lightning-button
+                    label="Back to Dashboard"
+                    variant="neutral"
+                    icon-name="utility:back"
+                    onclick={handleBack}>
+                </lightning-button>
+            </div>
+
+            <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+
+                <!-- Section: Organization Information -->
+                <div class="section-header" id="org-info-heading">
+                    <lightning-icon icon-name="standard:account" size="small" class="slds-m-right_x-small" alternative-text="Organization"></lightning-icon>
+                    Organization Information
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters_small" role="region" aria-labelledby="org-info-heading">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Organization Name</p>
+                        <p>{application.Organization_Name__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">EIN (Tax ID)</p>
+                        <p>{application.EIN__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Organization Type</p>
+                        <p>{application.Organization_Type__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Year Founded</p>
+                        <p>{application.Year_Founded__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Annual Operating Budget</p>
+                        <p>{formattedAnnualBudget}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Full-Time Employees</p>
+                        <p>{application.Num_Employees__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Primary Contact Name</p>
+                        <p>{application.Contact_Name__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Primary Contact Email</p>
+                        <p>{application.Contact_Email__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Primary Contact Phone</p>
+                        <p>{application.Contact_Phone__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_2-of-3 slds-p-bottom_small">
+                        <p class="field-label">Organization Address</p>
+                        <p>{application.Organization_Address__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-p-bottom_small">
+                        <p class="field-label">Mission Statement</p>
+                        <p class="mission-text">{application.Mission_Statement__c}</p>
+                    </div>
+                </div>
+
+                <!-- Section: Project Details -->
+                <div class="section-header" id="project-heading">
+                    <lightning-icon icon-name="standard:task" size="small" class="slds-m-right_x-small" alternative-text="Project"></lightning-icon>
+                    Project Details
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters_small" role="region" aria-labelledby="project-heading">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Project Title</p>
+                        <p>{application.Project_Title__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Project Category</p>
+                        <p>{application.Project_Category__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Target Population Served</p>
+                        <p>{application.Target_Population__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Estimated Beneficiaries</p>
+                        <p>{application.Num_Beneficiaries__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Total Project Cost</p>
+                        <p>{formattedTotalProjectCost}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Amount Requested</p>
+                        <p>{formattedAmountRequested}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Project Start Date</p>
+                        <p>{formattedProjectStartDate}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Project End Date</p>
+                        <p>{formattedProjectEndDate}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-p-bottom_small">
+                        <p class="field-label">Previously Funded</p>
+                        <p>{previouslyFundedLabel}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-p-bottom_small">
+                        <p class="field-label">Project Description</p>
+                        <p class="mission-text">{application.Project_Description__c}</p>
+                    </div>
+                </div>
+
+                <!-- Section: Eligibility Results -->
+                <div class="section-header" id="eligibility-heading">
+                    <lightning-icon icon-name="standard:calibration" size="small" class="slds-m-right_x-small" alternative-text="Eligibility"></lightning-icon>
+                    Eligibility Results
+                </div>
+                <div role="region" aria-labelledby="eligibility-heading">
+                    <template lwc:if={hasEligibilityResults}>
+                        <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_small eligibility-summary">
+                            <lightning-icon
+                                icon-name={eligibilityStatusIcon}
+                                size="small"
+                                class={eligibilityStatusClass}
+                                alternative-text={eligibilityStatusLabel}>
+                            </lightning-icon>
+                            <span class="slds-m-left_x-small">
+                                <strong class={eligibilityStatusClass}>{eligibilityStatusLabel}</strong>
+                                <span class="slds-text-color_weak slds-m-left_x-small">({eligibilityScoreLabel})</span>
+                            </span>
+                        </div>
+                        <ul class="eligibility-list" role="list" aria-label="Eligibility rule results">
+                            <template for:each={eligibilityResults} for:item="rule">
+                                <li key={rule.ruleId} class="eligibility-item slds-grid slds-grid_vertical-align-center">
+                                    <lightning-icon
+                                        icon-name={rule.iconName}
+                                        size="x-small"
+                                        class={rule.iconClass}
+                                        alternative-text={rule.iconAlt}>
+                                    </lightning-icon>
+                                    <div class="slds-m-left_small">
+                                        <p class="rule-name">{rule.ruleName}</p>
+                                        <p class="rule-message slds-text-color_weak">{rule.message}</p>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+                    <template lwc:elseif={application.Id}>
+                        <p class="slds-text-color_weak slds-p-vertical_small">No eligibility results available.</p>
+                    </template>
+                </div>
+
+                <!-- Section: Award Information (Approved only) -->
+                <template lwc:if={isApproved}>
+                    <div class="section-header" id="award-heading">
+                        <lightning-icon icon-name="standard:reward" size="small" class="slds-m-right_x-small" alternative-text="Award"></lightning-icon>
+                        Award Information
+                    </div>
+                    <div role="region" aria-labelledby="award-heading" class="award-section">
+                        <div class="award-highlight slds-p-around_medium slds-m-bottom_medium">
+                            <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">Grant Award Amount</p>
+                            <p class="award-amount">{formattedAwardAmount}</p>
+                            <template lwc:if={awardTotalScoreLabel}>
+                                <p class="slds-text-body_small slds-m-top_xx-small">
+                                    Score: {awardTotalScoreLabel} &bull; Award Rate: {awardPercentageLabel}
+                                </p>
+                            </template>
+                        </div>
+
+                        <template lwc:if={hasAwardBreakdown}>
+                            <h3 class="slds-text-title_caps slds-m-bottom_small">Scoring Breakdown</h3>
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer" role="grid" aria-label="Award scoring breakdown">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="slds-text-title_caps">Factor</th>
+                                        <th scope="col" class="slds-text-title_caps slds-text-align_center">Score</th>
+                                        <th scope="col" class="slds-text-title_caps slds-text-align_center">Max</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={awardFactors} for:item="factor">
+                                        <tr key={factor.key}>
+                                            <td>{factor.name}</td>
+                                            <td class="slds-text-align_center">
+                                                <strong>{factor.score}</strong>
+                                            </td>
+                                            <td class="slds-text-align_center">3</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Section: Reviewer Comments (Rejected only) -->
+                <template lwc:if={isRejected}>
+                    <div class="section-header section-header-rejected" id="rejection-heading">
+                        <lightning-icon icon-name="utility:warning" size="small" class="slds-m-right_x-small" alternative-text="Rejection"></lightning-icon>
+                        Reviewer Comments
+                    </div>
+                    <div role="region" aria-labelledby="rejection-heading" class="rejection-section slds-p-around_medium">
+                        <div class="slds-m-bottom_small">
+                            <p class="field-label">Comments</p>
+                            <p class="reviewer-comments">{reviewerComments}</p>
+                        </div>
+                        <template lwc:if={formattedReviewedDate}>
+                            <div>
+                                <p class="field-label">Reviewed Date</p>
+                                <p>{formattedReviewedDate}</p>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Section: Attached Documents -->
+                <div class="section-header" id="docs-heading">
+                    <lightning-icon icon-name="standard:file" size="small" class="slds-m-right_x-small" alternative-text="Documents"></lightning-icon>
+                    Attached Documents
+                </div>
+                <div role="region" aria-labelledby="docs-heading">
+                    <template lwc:if={hasFiles}>
+                        <ul class="file-list" role="list" aria-label="Attached documents">
+                            <template for:each={files} for:item="file">
+                                <li key={file.id} class="file-item slds-grid slds-grid_vertical-align-center slds-p-vertical_x-small">
+                                    <lightning-icon icon-name="doctype:attachment" size="small" alternative-text="File" class="slds-m-right_small"></lightning-icon>
+                                    <div class="slds-grow">
+                                        <p class="file-title">{file.title}</p>
+                                        <p class="slds-text-body_small slds-text-color_weak">{file.fileType} &bull; {file.size}</p>
+                                    </div>
+                                    <lightning-button-icon
+                                        icon-name="utility:download"
+                                        alternative-text="Download file"
+                                        title="Download"
+                                        data-version-id={file.versionId}
+                                        onclick={handleDownloadFile}>
+                                    </lightning-button-icon>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+                    <template lwc:else>
+                        <p class="slds-text-color_weak slds-p-vertical_small">No documents attached to this application.</p>
+                    </template>
+                </div>
+
+            </div>
+        </lightning-card>
+    </template>
+</template>

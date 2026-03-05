@@ -1,0 +1,30 @@
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+.badge-submitted {
+    background-color: #EAF3FF;
+    color: #0070D2;
+}
+.badge-underreview {
+    background-color: #FFF3E0;
+    color: #FF9A3C;
+}
+.badge-approved {
+    background-color: #E8F5E9;
+    color: #1A652A;
+}
+.badge-rejected {
+    background-color: #FFEBEE;
+    color: #993333;
+}
+.badge-default {
+    background-color: #F3F3F3;
+    color: #666666;
+}

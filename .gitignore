@@ -46,3 +46,15 @@ $RECYCLE.BIN/
 **/__pycache__/
 **/.venv/
 **/venv/
+
+# Cursor IDE
+.cursor/
+
+# Temp Apex scripts
+temp_*.apex
+
+# Internal task tracking
+tasks/
+
+# Agent transcripts
+agent-transcripts/

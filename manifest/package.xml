@@ -1,36 +1,96 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>*</members>
+        <members>Grant_Application__c</members>
+        <members>Status_History__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Grant_Application__c.Organization_Name__c</members>
+        <members>Grant_Application__c.EIN__c</members>
+        <members>Grant_Application__c.Organization_Type__c</members>
+        <members>Grant_Application__c.Year_Founded__c</members>
+        <members>Grant_Application__c.Annual_Budget__c</members>
+        <members>Grant_Application__c.Num_Employees__c</members>
+        <members>Grant_Application__c.Contact_Name__c</members>
+        <members>Grant_Application__c.Contact_Email__c</members>
+        <members>Grant_Application__c.Contact_Phone__c</members>
+        <members>Grant_Application__c.Organization_Address__c</members>
+        <members>Grant_Application__c.Mission_Statement__c</members>
+        <members>Grant_Application__c.Project_Title__c</members>
+        <members>Grant_Application__c.Project_Category__c</members>
+        <members>Grant_Application__c.Project_Description__c</members>
+        <members>Grant_Application__c.Target_Population__c</members>
+        <members>Grant_Application__c.Num_Beneficiaries__c</members>
+        <members>Grant_Application__c.Total_Project_Cost__c</members>
+        <members>Grant_Application__c.Amount_Requested__c</members>
+        <members>Grant_Application__c.Project_Start_Date__c</members>
+        <members>Grant_Application__c.Project_End_Date__c</members>
+        <members>Grant_Application__c.Previously_Funded__c</members>
+        <members>Grant_Application__c.Status__c</members>
+        <members>Grant_Application__c.Eligibility_Score__c</members>
+        <members>Grant_Application__c.Is_Eligible__c</members>
+        <members>Grant_Application__c.Eligibility_Results__c</members>
+        <members>Grant_Application__c.Award_Amount__c</members>
+        <members>Grant_Application__c.Award_Breakdown__c</members>
+        <members>Grant_Application__c.Reviewer_Comments__c</members>
+        <members>Grant_Application__c.Reviewed_Date__c</members>
+        <members>Grant_Application__c.Reviewer__c</members>
+        <members>Status_History__c.Application__c</members>
+        <members>Status_History__c.Old_Status__c</members>
+        <members>Status_History__c.New_Status__c</members>
+        <members>Status_History__c.Changed_By__c</members>
+        <members>Status_History__c.Comments__c</members>
+        <members>Status_History__c.Changed_At__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>Grant_Application__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>Grant_Review_Console</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>GrantEligibilityService</members>
+        <members>GrantEligibilityServiceTest</members>
+        <members>GrantAwardService</members>
+        <members>GrantAwardServiceTest</members>
+        <members>GrantApplicationController</members>
+        <members>GrantApplicationControllerTest</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>*</members>
-        <name>ApexComponent</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexPage</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexTestSuite</name>
-    </types>
-    <types>
-        <members>*</members>
+        <members>GrantApplicationTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
-        <members>*</members>
-        <name>AuraDefinitionBundle</name>
-    </types>
-    <types>
-        <members>*</members>
+        <members>grantApplicationForm</members>
+        <members>applicantDashboard</members>
+        <members>applicationDetail</members>
+        <members>reviewerApplicationList</members>
+        <members>reviewerApplicationDetail</members>
+        <members>awardBreakdown</members>
+        <members>eligibilityPanel</members>
+        <members>statusBadge</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>
-        <members>*</members>
-        <name>StaticResource</name>
+        <members>Grant_Reviewer</members>
+        <name>PermissionSet</name>
+    </types>
+    <types>
+        <members>Grant_Review_Home</members>
+        <members>Grant_Application_Record_Page</members>
+        <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>Grant_Application__c.EIN_Format</members>
+        <members>Grant_Application__c.Project_End_After_Start</members>
+        <members>Grant_Application__c.Amount_Under_50K</members>
+        <members>Grant_Application__c.Rejection_Requires_Comments</members>
+        <name>ValidationRule</name>
     </types>
     <version>65.0</version>
 </Package>

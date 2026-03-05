@@ -1,0 +1,242 @@
+<apex:page controller="CustomSelfRegController" showHeader="false" sidebar="false" standardStylesheets="false" docType="html-5.0" applyBodyTag="false" applyHtmlTag="false" lightningStylesheets="true">
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Maplewood Grant Portal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #001f44 0%, #003068 40%, #004a9f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .page-wrapper {
+            max-width: 460px;
+            width: 100%;
+        }
+        .brand-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .brand-logo {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .logo-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.2);
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 800;
+            border-radius: 0.5rem;
+            margin-right: 0.5rem;
+        }
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.2em;
+        }
+        .brand-title {
+            font-size: 1.125rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.05em;
+        }
+        .brand-subtitle {
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.4;
+        }
+        .register-card {
+            background: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            padding: 2rem 2.5rem 2.5rem;
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #16325c;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: #16325c;
+            margin-bottom: 0.25rem;
+        }
+        .required {
+            color: #c23934;
+            margin-right: 0.125rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.625rem 0.75rem;
+            border: 1px solid #d8dde6;
+            border-radius: 0.375rem;
+            font-size: 0.9375rem;
+            color: #16325c;
+            background: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input:focus {
+            border-color: #003068;
+            box-shadow: 0 0 0 3px rgba(0,48,104,0.15);
+            outline: none;
+        }
+        .btn-register {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #003068, #004a9f);
+            color: #fff;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.75rem;
+            transition: opacity 0.2s;
+        }
+        .btn-register:hover {
+            opacity: 0.9;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.25rem 0;
+            color: #b0adab;
+            font-size: 0.75rem;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .divider::before { margin-right: 0.75rem; }
+        .divider::after { margin-left: 0.75rem; }
+        .login-link {
+            text-align: center;
+            font-size: 0.875rem;
+        }
+        .login-link a {
+            color: #003068;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        .error-banner {
+            background-color: #fef0ef;
+            color: #c23934;
+            border: 1px solid #c23934;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        .success-banner {
+            background-color: #ecfaf0;
+            color: #1a652a;
+            border: 1px solid #1a652a;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .back-link a {
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+        .back-link a:hover {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="brand-header">
+            <div class="brand-logo">
+                <span class="logo-icon">M</span>
+                <span class="logo-text">APLEWOOD</span>
+            </div>
+            <h1 class="brand-title">Grant Portal</h1>
+            <p class="brand-subtitle">Community Development Grant Program</p>
+        </div>
+
+        <div class="register-card">
+            <h2 class="card-title">Create Your Account</h2>
+
+            <apex:form id="regForm">
+                <apex:outputPanel rendered="{!errorMessage != ''}" layout="block" styleClass="error-banner">
+                    {!errorMessage}
+                </apex:outputPanel>
+
+                <apex:outputPanel rendered="{!successMessage != ''}" layout="block" styleClass="success-banner">
+                    {!successMessage}
+                </apex:outputPanel>
+
+                <div class="form-group">
+                    <label for="fn" class="form-label">First Name</label>
+                    <apex:inputText id="fn" value="{!firstName}" styleClass="form-input" html-placeholder="Enter your first name" />
+                </div>
+
+                <div class="form-group">
+                    <label for="ln" class="form-label"><span class="required">*</span> Last Name</label>
+                    <apex:inputText id="ln" value="{!lastName}" styleClass="form-input" html-placeholder="Enter your last name" required="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="em" class="form-label"><span class="required">*</span> Email</label>
+                    <apex:inputText id="em" value="{!email}" styleClass="form-input" html-placeholder="you@example.com" required="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="pw" class="form-label"><span class="required">*</span> Create Password</label>
+                    <apex:inputSecret id="pw" value="{!password}" styleClass="form-input" html-placeholder="Minimum 8 characters" required="true" redisplay="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="cpw" class="form-label"><span class="required">*</span> Confirm Password</label>
+                    <apex:inputSecret id="cpw" value="{!confirmPassword}" styleClass="form-input" html-placeholder="Re-enter your password" required="true" redisplay="true" />
+                </div>
+
+                <apex:commandButton action="{!registerUser}" value="Create Account" styleClass="btn-register" reRender="regForm" />
+            </apex:form>
+
+            <div class="divider">or</div>
+
+            <div class="login-link">
+                <a href="/grants/login">Already have an account? Log in</a>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="/grants/">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
+</apex:page>

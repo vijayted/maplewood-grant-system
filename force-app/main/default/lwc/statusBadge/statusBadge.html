@@ -1,0 +1,8 @@
+<template>
+    <span class={badgeClass}>
+        <template lwc:if={showIcon}>
+            <lightning-icon icon-name={iconName} size="xx-small" alternative-text={label} class="slds-m-right_xx-small"></lightning-icon>
+        </template>
+        {label}
+    </span>
+</template>
