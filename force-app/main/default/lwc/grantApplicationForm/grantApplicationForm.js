@@ -304,6 +304,11 @@ export default class GrantApplicationForm extends LightningElement {
 
             this.dispatchEvent(new CustomEvent('complete', { detail: { recordId: appId } }));
         } catch (error) {
+            // #region agent log - capture full error details
+            console.error('[DEBUG-f2ea7e] Full error object:', JSON.stringify(error));
+            console.error('[DEBUG-f2ea7e] error.body:', error && error.body ? JSON.stringify(error.body) : 'no body');
+            fetch('http://127.0.0.1:7612/ingest/3c3a827d-c306-44e8-ad89-480fc0a14d1e',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'f2ea7e'},body:JSON.stringify({sessionId:'f2ea7e',location:'grantApplicationForm.js:handleSubmit:catch',message:'createApplication error',data:{fullError:JSON.stringify(error),body:error&&error.body?error.body:null,message:error&&error.message?error.message:null},timestamp:Date.now()})}).catch(()=>{});
+            // #endregion
             const errorMsg = this._extractErrorMessage(error);
             this.screenReaderMessage = 'Error submitting application: ' + errorMsg;
             this._showToast('Submission Error', errorMsg, 'error');

@@ -19,6 +19,10 @@
         <apexClass>SelfRegistrationController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>CustomStaffLoginController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <objectPermissions>
         <allowCreate>true</allowCreate>
         <allowDelete>false</allowDelete>
@@ -28,7 +32,6 @@
         <object>Grant_Application__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
-    <!-- FLS for non-required fields only (required fields get auto-access) -->
     <fieldPermissions>
         <editable>true</editable>
         <field>Grant_Application__c.Organization_Address__c</field>

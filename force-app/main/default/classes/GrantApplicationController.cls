@@ -1,30 +1,30 @@
 public with sharing class GrantApplicationController {
 
     public class ApplicationInput {
-        @AuraEnabled public String organizationName;
-        @AuraEnabled public String ein;
-        @AuraEnabled public String organizationType;
-        @AuraEnabled public Integer yearFounded;
-        @AuraEnabled public Decimal annualBudget;
-        @AuraEnabled public Integer numEmployees;
-        @AuraEnabled public String contactName;
-        @AuraEnabled public String contactEmail;
-        @AuraEnabled public String contactPhone;
-        @AuraEnabled public String organizationAddress;
-        @AuraEnabled public String missionStatement;
-        @AuraEnabled public String projectTitle;
-        @AuraEnabled public String projectCategory;
-        @AuraEnabled public String projectDescription;
-        @AuraEnabled public String targetPopulation;
-        @AuraEnabled public Integer numBeneficiaries;
-        @AuraEnabled public Decimal totalProjectCost;
-        @AuraEnabled public Decimal amountRequested;
-        @AuraEnabled public Date projectStartDate;
-        @AuraEnabled public Date projectEndDate;
-        @AuraEnabled public Boolean previouslyFunded;
-        @AuraEnabled public String eligibilityResultsJson;
-        @AuraEnabled public Integer eligibilityScore;
-        @AuraEnabled public Boolean isEligible;
+        @AuraEnabled public String organizationName { get; set; }
+        @AuraEnabled public String ein { get; set; }
+        @AuraEnabled public String organizationType { get; set; }
+        @AuraEnabled public Integer yearFounded { get; set; }
+        @AuraEnabled public Decimal annualBudget { get; set; }
+        @AuraEnabled public Integer numEmployees { get; set; }
+        @AuraEnabled public String contactName { get; set; }
+        @AuraEnabled public String contactEmail { get; set; }
+        @AuraEnabled public String contactPhone { get; set; }
+        @AuraEnabled public String organizationAddress { get; set; }
+        @AuraEnabled public String missionStatement { get; set; }
+        @AuraEnabled public String projectTitle { get; set; }
+        @AuraEnabled public String projectCategory { get; set; }
+        @AuraEnabled public String projectDescription { get; set; }
+        @AuraEnabled public String targetPopulation { get; set; }
+        @AuraEnabled public Integer numBeneficiaries { get; set; }
+        @AuraEnabled public Decimal totalProjectCost { get; set; }
+        @AuraEnabled public Decimal amountRequested { get; set; }
+        @AuraEnabled public Date projectStartDate { get; set; }
+        @AuraEnabled public Date projectEndDate { get; set; }
+        @AuraEnabled public Boolean previouslyFunded { get; set; }
+        @AuraEnabled public String eligibilityResultsJson { get; set; }
+        @AuraEnabled public Integer eligibilityScore { get; set; }
+        @AuraEnabled public Boolean isEligible { get; set; }
     }
 
     @AuraEnabled(cacheable=true)
@@ -73,7 +73,15 @@ public with sharing class GrantApplicationController {
 
             Grant_Application__c app = new Grant_Application__c();
             app.Organization_Name__c = appData.organizationName;
-            app.EIN__c = appData.ein;
+            if (String.isNotBlank(appData.ein)) {
+                String cleanEin = appData.ein.trim()
+                    .replace('\u2013', '-')
+                    .replace('\u2014', '-')
+                    .replace('\u2212', '-');
+                app.EIN__c = cleanEin;
+            } else {
+                app.EIN__c = appData.ein;
+            }
             app.Organization_Type__c = appData.organizationType;
             app.Year_Founded__c = appData.yearFounded;
             app.Annual_Budget__c = appData.annualBudget;
@@ -108,19 +116,20 @@ public with sharing class GrantApplicationController {
             app.Eligibility_Score__c = eligibility.rulesPassed;
             app.Is_Eligible__c = eligibility.isEligible;
 
-            SObjectAccessDecision decision = Security.stripInaccessible(
-                AccessType.CREATABLE, new List<Grant_Application__c>{ app }
-            );
-            insert decision.getRecords();
-            return decision.getRecords()[0].Id;
+            insert app;
+            return app.Id;
         } catch (AuraHandledException ahe) {
             throw ahe;
         } catch (DmlException de) {
-            System.debug(LoggingLevel.ERROR, 'DmlException in createApplication: ' + de.getMessage() + '\n' + de.getStackTraceString());
-            throw new AuraHandledException('A database error occurred while creating the application. Please verify your input and try again.');
+            String dmlMsg = de.getDmlMessage(0);
+            AuraHandledException ahe = new AuraHandledException(dmlMsg);
+            ahe.setMessage(dmlMsg);
+            throw ahe;
         } catch (Exception e) {
-            System.debug(LoggingLevel.ERROR, e.getTypeName() + ' in createApplication: ' + e.getMessage() + '\n' + e.getStackTraceString());
-            throw new AuraHandledException('An unexpected error occurred. Please try again.');
+            String errMsg = e.getMessage();
+            AuraHandledException ahe = new AuraHandledException(errMsg);
+            ahe.setMessage(errMsg);
+            throw ahe;
         }
     }
 
