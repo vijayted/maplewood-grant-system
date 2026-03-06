@@ -8,23 +8,23 @@
     <allowStandardLookups>false</allowStandardLookups>
     <allowStandardPortalPages>true</allowStandardPortalPages>
     <allowStandardSearch>false</allowStandardSearch>
-    <authorizationRequiredPage>CommunitiesLogin</authorizationRequiredPage>
+    <authorizationRequiredPage>CustomStaffLogin</authorizationRequiredPage>
     <bandwidthExceededPage>BandwidthExceeded</bandwidthExceededPage>
     <browserXssProtection>true</browserXssProtection>
     <cachePublicVisualforcePagesInProxyServers>true</cachePublicVisualforcePagesInProxyServers>
-    <clickjackProtectionLevel>SameOriginOnly</clickjackProtectionLevel>
+    <clickjackProtectionLevel>AllowAllFraming</clickjackProtectionLevel>
     <contentSniffingProtection>true</contentSniffingProtection>
     <enableAuraRequests>true</enableAuraRequests>
     <fileNotFoundPage>FileNotFound</fileNotFoundPage>
     <genericErrorPage>Exception</genericErrorPage>
     <inMaintenancePage>InMaintenance</inMaintenancePage>
-    <indexPage>CommunitiesLanding</indexPage>
+    <indexPage>CustomStaffLogin</indexPage>
     <masterLabel>Maplewood Grant Portal</masterLabel>
     <redirectToCustomDomain>false</redirectToCustomDomain>
     <referrerPolicyOriginWhenCrossOrigin>true</referrerPolicyOriginWhenCrossOrigin>
     <selfRegPage>CustomSelfRegister</selfRegPage>
-    <siteAdmin>vijay.sagi.e462d52313e0@agentforce.com</siteAdmin>
-    <siteGuestRecordDefaultOwner>vijay.sagi.e462d52313e0@agentforce.com</siteGuestRecordDefaultOwner>
+    <siteAdmin>vijay.sagi@maple.com</siteAdmin>
+    <siteGuestRecordDefaultOwner>vijay.sagi@maple.com</siteGuestRecordDefaultOwner>
     <siteType>ChatterNetwork</siteType>
     <urlPathPrefix>grantsvforcesite</urlPathPrefix>
 </CustomSite>

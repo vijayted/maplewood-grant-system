@@ -1,10 +1,32 @@
 <template>
-    <lightning-card title="Maplewood County Grant Application" icon-name="standard:opportunity">
-        <lightning-progress-indicator current-step={currentStep} type="base" variant="base">
-            <lightning-progress-step label="Organization Info" value="section1"></lightning-progress-step>
-            <lightning-progress-step label="Project Details" value="section2"></lightning-progress-step>
-            <lightning-progress-step label="Review & Submit" value="review"></lightning-progress-step>
-        </lightning-progress-indicator>
+    <lightning-card icon-name="standard:opportunity">
+        <h1 slot="title" class="slds-card__header-title">
+            <span class="slds-text-heading_small">Maplewood County Grant Application</span>
+        </h1>
+
+        <!-- Custom Step Indicator -->
+        <div class="step-indicator" role="navigation" aria-label="Application progress">
+            <ol class="step-list">
+                <li class={step1Class} data-step="section1">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Organization Info</span>
+                </li>
+                <li class="step-connector" aria-hidden="true">
+                    <div class={connector1Class}></div>
+                </li>
+                <li class={step2Class} data-step="section2">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Project Details</span>
+                </li>
+                <li class="step-connector" aria-hidden="true">
+                    <div class={connector2Class}></div>
+                </li>
+                <li class={step3Class} data-step="review">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Review &amp; Submit</span>
+                </li>
+            </ol>
+        </div>
 
         <template lwc:if={errorBanner}>
             <div class="error-banner slds-m-horizontal_medium slds-m-top_small" role="alert">

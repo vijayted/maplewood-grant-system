@@ -1,3 +1,91 @@
+/* Step Indicator */
+.step-indicator {
+    padding: 1.25rem 1.5rem 1rem;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fafbfc;
+}
+
+.step-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.step-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.step-active .step-number {
+    background: #003068;
+    color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 48, 104, 0.2);
+}
+
+.step-active .step-label {
+    color: #003068;
+}
+
+.step-completed .step-number {
+    background: #1a652a;
+    color: #ffffff;
+}
+
+.step-completed .step-label {
+    color: #1a652a;
+}
+
+.step-upcoming .step-number {
+    background: #e5e5e5;
+    color: #888;
+}
+
+.step-upcoming .step-label {
+    color: #888;
+}
+
+.step-connector {
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+}
+
+.connector-line {
+    width: 48px;
+    height: 2px;
+    background: #e5e5e5;
+    border-radius: 1px;
+    transition: background 0.2s ease;
+}
+
+.connector-filled {
+    background: #1a652a;
+}
+
 /* Error/Success banners */
 .error-banner {
     background-color: #c23934;

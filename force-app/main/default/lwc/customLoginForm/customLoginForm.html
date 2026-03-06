@@ -1,0 +1,68 @@
+<template>
+    <div class="login-page">
+        <div class="login-content">
+            <!-- Branding -->
+            <div class="brand-section">
+                <div class="brand-logo">
+                    <span class="logo-icon">M</span>
+                    <span class="logo-text">APLEWOOD</span>
+                </div>
+                <h1 class="brand-title">Grant Portal</h1>
+                <p class="brand-subtitle">Sign in to manage your grant applications</p>
+            </div>
+
+            <!-- Login Card -->
+            <div class="login-card">
+                <h2 class="card-title">Welcome Back</h2>
+
+                <template lwc:if={errorMessage}>
+                    <div class="error-banner" role="alert">
+                        <span class="error-text">{errorMessage}</span>
+                    </div>
+                </template>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        class="form-input"
+                        placeholder="you@maplewood.gov"
+                        value={email}
+                        onchange={handleEmailChange}
+                        onkeydown={handleKeyDown}
+                        autocomplete="email"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        class="form-input"
+                        placeholder="Enter your password"
+                        value={password}
+                        onchange={handlePasswordChange}
+                        onkeydown={handleKeyDown}
+                        autocomplete="current-password"
+                    />
+                </div>
+
+                <button class="btn-login" onclick={handleLogin} disabled={isLoading}>
+                    <template lwc:if={isLoading}>Signing in...</template>
+                    <template lwc:else>Sign In</template>
+                </button>
+
+                <div class="links-row">
+                    <a href="/grants/ForgotPassword" class="link">Forgot password?</a>
+                    <a href="/grants/SelfRegister" class="link">Create an account</a>
+                </div>
+            </div>
+
+            <div class="footer-text">
+                Need help? Contact grants@maplewood.gov
+            </div>
+        </div>
+    </div>
+</template>

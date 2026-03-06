@@ -1,69 +1,12 @@
 <template>
-    <!-- Guest View: Welcome + Login/Register -->
+    <!-- Guest View: Login Form -->
     <template lwc:if={isGuest}>
-        <div class="landing-wrapper">
-            <div class="landing-container">
-                <!-- Hero Banner -->
-                <div class="hero-banner">
-                    <div class="slds-m-bottom_medium">
-                        <span class="logo-icon-landing">M</span>
-                        <span class="logo-text-landing">APLEWOOD</span>
-                    </div>
-                    <h1 class="slds-text-heading_large slds-m-bottom_medium hero-heading">
-                        Community Development Grant Program
-                    </h1>
-                    <p class="slds-text-body_regular slds-m-bottom_large hero-description">
-                        Supporting local organizations working to strengthen neighborhoods, expand
-                        economic opportunity, and improve quality of life across the county. Eligible
-                        nonprofits and community groups can apply for funding of up to $50,000.
-                    </p>
-                    <div class="slds-grid slds-grid_align-center slds-gutters_small slds-wrap">
-                        <div class="slds-col slds-shrink-none slds-m-bottom_small">
-                            <a href="/grants/login" class="slds-button slds-button_stretch hero-btn hero-btn-login">Log In</a>
-                        </div>
-                        <div class="slds-col slds-shrink-none slds-m-bottom_small">
-                            <a href="/grants/SelfRegister" class="slds-button slds-button_stretch hero-btn hero-btn-register">Register</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Program Highlights -->
-                <div class="slds-grid slds-wrap slds-gutters slds-grid_align-center slds-p-top_large">
-                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-p-around_small">
-                        <div class="slds-p-around_medium slds-text-align_center highlight-card">
-                            <lightning-icon icon-name="utility:money" size="medium" alternative-text="Funding" class="slds-m-bottom_small highlight-icon"></lightning-icon>
-                            <h3 class="slds-text-heading_small slds-m-bottom_xx-small highlight-heading">Up to $50,000</h3>
-                            <p class="slds-text-body_small highlight-subtext">Per approved project</p>
-                        </div>
-                    </div>
-                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-p-around_small">
-                        <div class="slds-p-around_medium slds-text-align_center highlight-card">
-                            <lightning-icon icon-name="utility:groups" size="medium" alternative-text="Organizations" class="slds-m-bottom_small highlight-icon"></lightning-icon>
-                            <h3 class="slds-text-heading_small slds-m-bottom_xx-small highlight-heading">Nonprofits &amp; CBOs</h3>
-                            <p class="slds-text-body_small highlight-subtext">Eligible organization types</p>
-                        </div>
-                    </div>
-                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-p-around_small">
-                        <div class="slds-p-around_medium slds-text-align_center highlight-card">
-                            <lightning-icon icon-name="utility:date_input" size="medium" alternative-text="Timeline" class="slds-m-bottom_small highlight-icon"></lightning-icon>
-                            <h3 class="slds-text-heading_small slds-m-bottom_xx-small highlight-heading">24 Months Max</h3>
-                            <p class="slds-text-body_small highlight-subtext">Project duration</p>
-                        </div>
-                    </div>
-                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-p-around_small">
-                        <div class="slds-p-around_medium slds-text-align_center highlight-card">
-                            <lightning-icon icon-name="utility:people" size="medium" alternative-text="Impact" class="slds-m-bottom_small highlight-icon"></lightning-icon>
-                            <h3 class="slds-text-heading_small slds-m-bottom_xx-small highlight-heading">50+ Beneficiaries</h3>
-                            <p class="slds-text-body_small highlight-subtext">Minimum community impact</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <c-custom-login-form></c-custom-login-form>
     </template>
 
     <!-- Authenticated View: Dashboard / Form / Detail -->
     <template lwc:if={isLoggedIn}>
+        <div class="auth-wrapper">
         <div class="user-bar">
             <span class="welcome-text">Welcome to the Maplewood Grant Portal</span>
             <lightning-button
@@ -137,8 +80,8 @@
 
         <!-- Application Form View -->
         <template lwc:if={showForm}>
-            <nav class="slds-m-bottom_small slds-p-horizontal_medium" aria-label="Breadcrumb">
-                <ol class="slds-breadcrumb slds-list_horizontal">
+            <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+                <ol class="slds-breadcrumb">
                     <li class="slds-breadcrumb__item">
                         <a href="javascript:void(0);" onclick={handleBackToDashboard}>My Applications</a>
                     </li>
@@ -150,8 +93,8 @@
 
         <!-- Application Detail View -->
         <template lwc:if={showDetail}>
-            <nav class="slds-m-bottom_small slds-p-horizontal_medium" aria-label="Breadcrumb">
-                <ol class="slds-breadcrumb slds-list_horizontal">
+            <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+                <ol class="slds-breadcrumb">
                     <li class="slds-breadcrumb__item">
                         <a href="javascript:void(0);" onclick={handleBackToDashboard}>My Applications</a>
                     </li>
@@ -160,5 +103,6 @@
             </nav>
             <c-application-detail record-id={selectedRecordId} onback={handleBackToDashboard}></c-application-detail>
         </template>
+        </div>
     </template>
 </template>

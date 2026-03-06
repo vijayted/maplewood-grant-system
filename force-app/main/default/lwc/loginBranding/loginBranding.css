@@ -1,62 +1,55 @@
-/* Fixed gradient that covers the entire viewport behind the login page */
-.page-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(135deg, #001f44 0%, #003068 40%, #004a9f 100%);
-    z-index: -1;
+:host {
+    display: block;
+    color: #ffffff !important;
 }
 
 .brand-header {
     text-align: center;
-    padding: 2.5rem 1rem 1.5rem;
-    position: relative;
-    z-index: 1;
+    padding: 3rem 1rem 2rem;
+    color: #ffffff !important;
 }
 
 .brand-logo {
     display: inline-flex;
     align-items: center;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.875rem;
 }
 
 .logo-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
+    width: 52px;
+    height: 52px;
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff !important;
     font-size: 1.75rem;
     font-weight: 800;
-    border-radius: 0.5rem;
-    margin-right: 0.5rem;
+    border-radius: 0.75rem;
+    margin-right: 0.625rem;
     letter-spacing: -1px;
 }
 
 .logo-text {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.2em;
+    color: #ffffff !important;
+    letter-spacing: 0.22em;
 }
 
 .brand-title {
-    font-size: 1.25rem;
+    font-size: 1.375rem;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.85);
-    margin-top: -0.25rem;
-    margin-bottom: 0.75rem;
+    color: rgba(255, 255, 255, 0.85) !important;
+    margin-bottom: 0.625rem;
     letter-spacing: 0.05em;
 }
 
 .brand-subtitle {
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.6) !important;
     line-height: 1.5;
-    max-width: 360px;
+    max-width: 380px;
     margin: 0 auto;
 }

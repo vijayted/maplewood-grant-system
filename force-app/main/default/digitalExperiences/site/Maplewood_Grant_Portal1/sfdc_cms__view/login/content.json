@@ -15,28 +15,14 @@
             "maxContentWidth" : "",
             "sectionColumnGutterWidth" : "",
             "sectionConfig" : "{\"UUID\":\"5d43ae47-5426-4d31-a6da-1a2ed924f774\",\"columns\":[{\"UUID\":\"4e61a6cf-f8ef-405a-abc3-d94fb2e8599a\",\"columnName\":\"Column 1\",\"columnKey\":\"col1\",\"columnWidth\":\"12\",\"seedComponents\":null}]}",
-            "sectionMinHeight" : "",
-            "sectionVerticalAlign" : "flex-start"
+            "sectionMinHeight" : "100vh",
+            "sectionVerticalAlign" : "center"
           },
           "children" : [ {
             "children" : [ {
               "attributes" : {},
-              "definition" : "c:loginBranding",
+              "definition" : "c:customLoginForm",
               "id" : "35f82b9e-31ed-4ee7-91d7-c1d7638b7fbd",
-              "type" : "component"
-            }, {
-              "attributes" : {
-                "forgotPasswordLabel" : "Forgot your password?",
-                "forgotPasswordUrl" : "/ForgotPassword",
-                "loginButtonLabel" : "Log In",
-                "passwordLabel" : "Password",
-                "selfRegisterLabel" : "Don't have an account? Register",
-                "selfRegisterUrl" : "/SelfRegister",
-                "startUrl" : "",
-                "usernameLabel" : "Email"
-              },
-              "definition" : "community_login:loginForm",
-              "id" : "a7b779ff-52e9-4bef-86ef-b06e366f9d5d",
               "type" : "component"
             } ],
             "id" : "4e61a6cf-f8ef-405a-abc3-d94fb2e8599a",

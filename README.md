@@ -34,7 +34,8 @@ force-app/
         awardBreakdown/                 # Scoring matrix display
         eligibilityPanel/               # Pass/fail rule indicators
         statusBadge/                    # Color-coded status badges
-        loginBranding/                  # Login page branding
+        customLoginForm/                # Custom branded login (Apex-backed)
+        loginBranding/                  # Login page branding header
         customSelfRegister/             # Registration redirect
       objects/
         Grant_Application__c/           # Main application object
@@ -49,7 +50,12 @@ force-app/
         EIN_Format, Project_End_After_Start,
         Amount_Under_50K, Rejection_Requires_Comments
       pages/
+        CustomStaffLogin.page           # VF branded login for Force.com site
         CustomSelfRegister.page         # VF self-registration page
+        LoginRightFrame.page            # My Domain login right-frame branding
+      staticresources/
+        MaplewoodLogoWhite.png          # White logo for dark backgrounds
+        MaplewoodLogoDark.png           # Dark logo for light backgrounds
       applications/
         Grant_Review_Console.app-meta.xml
       digitalExperiences/               # Experience Cloud site config
@@ -87,6 +93,7 @@ Master\-Detail to Grant\_Application\_\_c with fields: Old\_Status\_\_c, New\_St
 | `GrantApplicationController` | CRUD operations | Uses `ApplicationInput` wrapper class, `Security.stripInaccessible()`, `WITH SECURITY_ENFORCED` |
 | `GrantNotificationService` | Email notifications | `@future` method sends emails on status changes |
 | `GrantApplicationTriggerHandler` | Trigger handler | Creates Status\_History\_\_c records, publishes Platform Events, triggers notifications |
+| `CustomStaffLoginController` | Login controller | Visualforce login (Apex `Site.login()`) \+ `@AuraEnabled` method for LWC\-based login |
 | `CustomSelfRegController` | Self\-registration | Creates portal users, auto\-assigns Grant\_Applicant permission set |
 
 All `@AuraEnabled` methods include `try/catch` with `AuraHandledException` for proper error handling.
@@ -150,7 +157,8 @@ Called imperatively from LWC with debounce for real\-time feedback. Stored as JS
 | `applicantDashboard` | Landing page (guest view with gradient hero), authenticated dashboard with application list, form, and detail navigation |
 | `grantApplicationForm` | Multi\-step form (Organization → Project → Review & Submit) with real\-time eligibility panel, file upload, and inline error/success banners |
 | `applicationDetail` | Read\-only view showing all fields, eligibility results, award breakdown (if approved), reviewer comments (if rejected), and uploaded documents |
-| `loginBranding` | Branded login page header with Maplewood logo and gradient background |
+| `customLoginForm` | Full\-page branded login with Apex `Site.login()` integration, inline error handling, and gradient background |
+| `loginBranding` | Branded login page header with Maplewood logo |
 | `customSelfRegister` | Redirects to Visualforce self\-registration page |
 
 ### Lightning App (Reviewer\-Facing)
@@ -238,7 +246,7 @@ sf org assign permset -n Grant_Reviewer -o MaplewoodDev
 * Navigate to **Setup > Digital Experiences > All Sites**
 * The "Maplewood Grant Portal" site should be deployed. If not, create one using the LWR template
 * Enable self\-registration for external users (Customer Community license)
-* Verify pages: Home (applicantDashboard), Login (loginBranding \+ loginForm), Register
+* Verify pages: Home (applicantDashboard), Login (customLoginForm), Register
 * Publish the site
 
 ### 5. Configure Internal Lightning App
@@ -300,6 +308,14 @@ LWR guest users cannot reliably make imperative Apex calls, so self\-registratio
 
 Eligibility results and award breakdowns are stored as JSON in LongTextArea fields for flexible LWC rendering without additional related objects.
 
+### Custom Login via Apex Site.login()
+
+The standard `community_login:loginForm` was replaced with a custom LWC (`customLoginForm`) that calls an `@AuraEnabled` Apex method using `Site.login()`. This provides full control over the login UI, error handling, and branding while using the proper Salesforce authentication mechanism. A Visualforce login page (`CustomStaffLogin`) backs the Force.com site for direct URL access.
+
+### Dual Login Experiences
+
+Internal staff authenticate via the Salesforce My Domain login page (with `LoginRightFrame.page` branding). External applicants authenticate via the Experience Cloud site using `customLoginForm`, which presents a branded gradient login page with inline error feedback.
+
 ### Component\-Level Backgrounds
 
 The gradient background is applied at the LWC component level (not global CSS) because LWR Experience Cloud sites don't reliably support global CSS overrides on page\-level elements.
@@ -320,4 +336,4 @@ The gradient background is applied at the LWC component level (not global CSS) b
 
 * **Cursor IDE with Claude** \- Used for code generation, architecture planning, iterative debugging, and implementation
 * **Example of AI help**: Generated the 5\-factor scoring matrix logic in `GrantAwardService` with proper boundary conditions and rounding
-* **Example of AI correction**: Discovered that `ShowToastEvent` doesn't work in LWR Experience Cloud sites and pivoted to inline error/success banners; also fixed global CSS breaking the LWR site layout by moving to component\-level gradient backgrounds
+* **Example of AI correction**: Discovered that `ShowToastEvent` doesn't work in LWR Experience Cloud sites and pivoted to inline error/success banners; fixed global CSS breaking the LWR site layout by moving to component\-level gradient backgrounds; replaced form POST login with Apex `Site.login()` after discovering Experience Cloud doesn't reliably process raw form POSTs to the login endpoint

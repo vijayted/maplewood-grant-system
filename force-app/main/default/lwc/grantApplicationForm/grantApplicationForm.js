@@ -96,6 +96,30 @@ export default class GrantApplicationForm extends LightningElement {
         return this.currentStep === 'review';
     }
 
+    get step1Class() {
+        if (this.isSection1) return 'step-item step-active';
+        return 'step-item step-completed';
+    }
+
+    get step2Class() {
+        if (this.isSection2) return 'step-item step-active';
+        if (this.isReview) return 'step-item step-completed';
+        return 'step-item step-upcoming';
+    }
+
+    get step3Class() {
+        if (this.isReview) return 'step-item step-active';
+        return 'step-item step-upcoming';
+    }
+
+    get connector1Class() {
+        return this.isSection1 ? 'connector-line' : 'connector-line connector-filled';
+    }
+
+    get connector2Class() {
+        return this.isReview ? 'connector-line connector-filled' : 'connector-line';
+    }
+
     get hasEligibilityRules() {
         return this.eligibilityRules && this.eligibilityRules.length > 0;
     }
