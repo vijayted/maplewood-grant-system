@@ -92,7 +92,7 @@ export default class ApplicationDetail extends LightningElement {
             if (parsed.factors) {
                 parsed.factors = parsed.factors.map(f => ({
                     ...f,
-                    key: f.name || f.factor
+                    key: f.factorName
                 }));
             }
             this.awardBreakdown = parsed;
